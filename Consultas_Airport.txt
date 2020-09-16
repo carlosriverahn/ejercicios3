@@ -1,0 +1,35 @@
+1. Quantitat de registres de la taula de vols:
+
+SELECT count(*) AS TOTAL FROM flights;
+
+2. Retard promig de sortida i arribada segons l’aeroport origen.
+
+SELECT Origin, avg(ArrDelay) AS prom_arribades, avg(DepDelay) AS prom_sortides  FROM flights group by Origin
+
+3. Retard promig d’arribada dels vols, per mesos, anys i segons l’aeroport origen. A més, volen que els resultat es mostrin de la següent forma (fixa’t en l’ordre de les files):
+
+SELECT Origin, colYear, colMonth, ArrDelay AS prom_arribades FROM flights order by Origin, colYear, colMonth
+
+4. Retard promig d’arribada dels vols, per mesos, anys i segons l’aeroport origen (mateixa consulta que abans i amb el mateix ordre). Però a més, ara volen que en comptes del codi de l’aeroport es mostri el nom de la ciutat.
+
+SELECT t1.city, t2.colYear, t2.colMonth, t2.ArrDelay AS prom_arribades 
+FROM usairports t1 RIGHT JOIN flights t2 ON t1.iata=t2.origin ORDER BY t1.city, t2.colYear, t2.colMonth
+
+5. Les companyies amb més vols cancelats, per mesos i any. A més, han d’estar ordenades de forma
+que les companyies amb més cancel·lacions apareguin les primeres.
+
+SELECT t1.CarrierCode, t2.colYear, t2.colMonth, t2.Cancelled AS Total_Cancelled 
+FROM carriers t1 RIGHT JOIN flights t2 ON t1.CarrierCode=t2.UniqueCarrier ORDER BY t2.Cancelled desc
+
+6. L’identificador dels 10 avions que més distància han recorregut fent vols.
+
+SELECT TailNum, sum(Distance) AS totalDistance
+FROM flights group by TailNum ORDER BY TailNum desc
+
+7. Companyies amb el seu retard promig només d’aquelles les quals els seus vols arriben al seu destí
+amb un retràs promig major de 10 minuts.
+
+SELECT UniqueCarrier, avg(DepDelay) AS avgDelay FROM flights 
+GROUP BY UniqueCarrier HAVING AVG(DepDelay) > 10 ORDER BY DepDelay desc
+
+
